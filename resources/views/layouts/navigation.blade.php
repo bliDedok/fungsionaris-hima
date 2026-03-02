@@ -30,6 +30,21 @@
                     <x-nav-link :href="route('admin.periods.index')" :active="request()->routeIs('admin.periods.*')">
                         Periods
                     </x-nav-link>
+                    <x-nav-link :href="route('admin.member-period-roles.index')" :active="request()->routeIs('admin.member-period-roles.*')">
+                        Fungsionaris
+                    </x-nav-link>
+                    <x-nav-link :href="route('admin.members.index')" :active="request()->routeIs('admin.members.*')">
+                        Members
+                    </x-nav-link>
+                    <x-nav-link :href="route('admin.programs.index')" :active="request()->routeIs('admin.programs.*')">
+                        Programs
+                    </x-nav-link>
+                    <x-nav-link :href="route('admin.registrations.index')" :active="request()->routeIs('admin.registrations.*')">
+                        Pendaftaran
+                    </x-nav-link>
+                    <x-nav-link :href="route('admin.galleries.index')" :active="request()->routeIs('admin.galleries.*')">
+                        Gallery
+                    </x-nav-link>
                     @endrole
                 </div>
             </div>

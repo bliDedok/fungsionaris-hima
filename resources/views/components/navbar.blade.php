@@ -12,14 +12,16 @@
 
             <!-- Menu tengah -->
             <div class="hidden md:flex items-center gap-6 text-xs md:text-sm">
-                <a class="nav-link" href="#" onclick="event.preventDefault(); scrollToSection('home')">Home</a>
-                <a class="nav-link" href="#" onclick="event.preventDefault(); scrollToSection('about')">About</a>
-                <a class="nav-link" href="#"
+                <a class="nav-link" href="" onclick="event.preventDefault(); scrollToSection('home')">Home</a>
+                <a class="nav-link" href="" onclick="event.preventDefault(); scrollToSection('about')">About</a>
+                <a class="nav-link" href=""
                     onclick="event.preventDefault(); scrollToSection('fungsionaris')">Fungsionaris</a>
-                <a class="nav-link" href="#" onclick="event.preventDefault(); scrollToSection('program-kerja')">Program
+                <a class="nav-link" href="" onclick="event.preventDefault(); scrollToSection('program-kerja')">Program
                     Kerja</a>
-                <a class="nav-link" href="#" onclick="event.preventDefault(); scrollToSection('gallery')">Gallery</a>
-                <a class="nav-link" href="#" onclick="event.preventDefault(); scrollToSection('contact')">Contact</a>
+                <a class="nav-link" href="" onclick="event.preventDefault(); scrollToSection('info-pendaftaran')">Info
+                    Pendaftaran</a>
+                <a class="nav-link" href="" onclick="event.preventDefault(); scrollToSection('gallery')">Gallery</a>
+                <a class="nav-link" href="" onclick="event.preventDefault(); scrollToSection('contact')">Contact</a>
             </div>
 
         </div>

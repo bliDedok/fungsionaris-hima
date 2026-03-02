@@ -68,6 +68,8 @@
 <body class="bg-white text-gray-900 overflow-x-hidden">
 
     @include('components.navbar')
+
+    {{-- ================================ HERO ================================ --}}
     <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden">
 
         <div class="swiper heroSwiper absolute inset-0 z-0">
@@ -110,6 +112,7 @@
         </div>
     </section>
 
+    {{-- ================================ ABOUT ================================ --}}
     <section id="about" class="min-h-screen flex items-center py-24 bg-gray-50">
         <div class="container mx-auto px-6">
 
@@ -118,7 +121,6 @@
                 <!-- KOLOM KIRI (VIDEO) -->
                 <div class="w-full">
                     <div class="aspect-video bg-gray-300 rounded-xl shadow-lg flex items-center justify-center">
-                        <!-- Nanti ganti ini dengan iframe Google Drive -->
                         <iframe class="w-full h-full rounded-xl shadow-lg"
                             src="https://www.youtube.com/embed/JN1hmWrMX8g" title="YouTube video" frameborder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -150,48 +152,57 @@
         </div>
     </section>
 
+    {{-- ================================ FUNGSIONARIS ================================ --}}
     <section id="fungsionaris" class="min-h-screen flex items-center justify-center py-24 section-dark text-white">
         <div class="container mx-auto px-6">
             <div class="text-center mb-20">
                 <p class="italic text-yellow-500 text-xl font-serif">Susunan</p>
                 <h2 class="text-4xl md:text-6xl font-black tracking-widest uppercase">FUNGSIONARIS</h2>
+                @if($activePeriod)
+                    <p class="text-gray-400 mt-2">Periode {{ $activePeriod->name }}</p>
+                @endif
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-16 max-w-6xl mx-auto">
-                <div class="text-center group">
-                    <div class="ornate-frame w-64 h-80 mx-auto mb-6 overflow-hidden bg-gray-800">
-                        <img src="https://via.placeholder.com/300x400"
-                            class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500">
-                    </div>
-                    <h3 class="font-bold text-xl uppercase">Renald Kevin Azzaky</h3>
-                    <p class="text-yellow-500">Ketua Umum</p>
+            @if($fungsionaris->count() > 0)
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-16 max-w-6xl mx-auto">
+                    @foreach($fungsionaris->take(3) as $f)
+                        <div class="text-center group">
+                            <div class="ornate-frame w-64 h-80 mx-auto mb-6 overflow-hidden bg-gray-800">
+                                <img src="{{ $f->member->photo_url }}"
+                                    class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500">
+                            </div>
+                            <h3 class="font-bold text-xl uppercase">{{ $f->member->name }}</h3>
+                            <p class="text-yellow-500">{{ $f->position->name ?? '' }}</p>
+                        </div>
+                    @endforeach
                 </div>
 
-                <div class="text-center group">
-                    <div class="ornate-frame w-64 h-80 mx-auto mb-6 overflow-hidden bg-gray-800">
-                        <img src="https://via.placeholder.com/300x400"
-                            class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500">
+                @if($fungsionaris->count() > 3)
+                    {{-- Additional functionaries in smaller grid --}}
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-10 max-w-6xl mx-auto mt-16">
+                        @foreach($fungsionaris->slice(3) as $f)
+                            <div class="text-center group">
+                                <div class="ornate-frame w-40 h-52 mx-auto mb-4 overflow-hidden bg-gray-800">
+                                    <img src="{{ $f->member->photo_url }}"
+                                        class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500">
+                                </div>
+                                <h3 class="font-bold text-sm uppercase">{{ $f->member->name }}</h3>
+                                <p class="text-yellow-500 text-xs">{{ $f->position->name ?? '' }}</p>
+                                @if($f->division)
+                                    <p class="text-gray-400 text-xs">{{ $f->division->name }}</p>
+                                @endif
+                            </div>
+                        @endforeach
                     </div>
-                    <h3 class="font-bold text-xl uppercase">Renald Kevin Azzaky</h3>
-                    <p class="text-yellow-500">Wakil Ketua</p>
-                </div>
+                @endif
+            @else
+                <p class="text-center text-gray-400">Data fungsionaris belum tersedia.</p>
+            @endif
 
-                <div class="text-center group">
-                    <div class="ornate-frame w-64 h-80 mx-auto mb-6 overflow-hidden bg-gray-800">
-                        <img src="https://via.placeholder.com/300x400"
-                            class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500">
-                    </div>
-                    <h3 class="font-bold text-xl uppercase">Renald Kevin Azzoky</h3>
-                    <p class="text-yellow-500">Sekretaris Umum</p>
-                </div>
-            </div>
-            <div class="text-center mt-16">
-                <a href="#" class="inline-block px-10 py-3 bg-yellow-500 text-black font-semibold uppercase tracking-wider rounded-full transition duration-300
-                hover:bg-yellow-400 hover:scale-105 hover:shadow-lg hover:shadow-yellow-500/40">Lihat Selengkapnya</a>
-            </div>
         </div>
     </section>
 
+    {{-- ================================ PROGRAM KERJA ================================ --}}
     <section id="program-kerja" class="min-h-screen flex items-center justify-center py-24 bg-white">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
@@ -199,48 +210,52 @@
                 <h2 class="text-4xl md:text-5xl font-bold text-yellow-600 uppercase">PROGRAM KERJA</h2>
             </div>
 
-            <div
-                class="border-[6px] border-yellow-500 p-8 md:p-16 rounded-[40px] max-w-5xl mx-auto relative shadow-2xl">
-                <div
-                    class="absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-900 text-white py-3 px-12 rounded-full font-bold text-2xl border-4 border-white">
-                    2025</div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
-                    <div class="relative overflow-hidden rounded-2xl h-56 group bg-black">
-                        <img src="{{ asset('assets/img/program-kerja/it-versary.png')}}"
-                            class="w-full h-full object-cover opacity-60 group-hover:scale-110 transition duration-500">
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <h4 class="text-white font-bold text-2xl uppercase tracking-widest">IT-VERSARY</h4>
-                        </div>
-                    </div>
-                    <div class="relative overflow-hidden rounded-2xl h-56 group bg-black">
-                        <img src="https://via.placeholder.com/600x400"
-                            class="w-full h-full object-cover opacity-60 group-hover:scale-110 transition duration-500">
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <h4 class="text-white font-bold text-2xl uppercase tracking-widest">SEMINAR AKADEMIK</h4>
-                        </div>
-                    </div>
-                    <div class="relative overflow-hidden rounded-2xl h-56 group bg-black">
-                        <img src="https://via.placeholder.com/600x400"
-                            class="w-full h-full object-cover opacity-60 group-hover:scale-110 transition duration-500">
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <h4 class="text-white font-bold text-2xl uppercase tracking-widest">KERJA SOSIAL
-                            </h4>
-                        </div>
-                    </div>
-                    <div class="relative overflow-hidden rounded-2xl h-56 group bg-black">
-                        <img src="https://via.placeholder.com/600x400"
-                            class="w-full h-full object-cover opacity-60 group-hover:scale-110 transition duration-500">
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <h4 class="text-white font-bold text-2xl uppercase tracking-widest">IT-BOOTCAMP</h4>
-                        </div>
-                    </div>
+            {{-- Year tabs --}}
+            @if($periods->count() > 0)
+                <div class="flex flex-wrap justify-center gap-3 mb-10">
+                    @foreach($periods as $idx => $period)
+                        <button onclick="showPeriod({{ $period->id }})"
+                            class="period-tab px-6 py-2 rounded-full font-bold text-sm border-2 transition-all duration-300
+                                   {{ $idx === 0 ? 'bg-gray-900 text-white border-gray-900' : 'bg-white text-gray-800 border-yellow-500 hover:bg-yellow-500 hover:text-white' }}"
+                            data-period="{{ $period->id }}">
+                            {{ $period->name }}
+                        </button>
+                    @endforeach
                 </div>
-            </div>
+
+                {{-- Programs per period --}}
+                @foreach($periods as $idx => $period)
+                    <div class="period-content border-[6px] border-yellow-500 p-8 md:p-16 rounded-[40px] max-w-5xl mx-auto relative shadow-2xl {{ $idx === 0 ? '' : 'hidden' }}"
+                         data-period="{{ $period->id }}">
+                        <div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-900 text-white py-3 px-12 rounded-full font-bold text-2xl border-4 border-white">
+                            {{ $period->name }}
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
+                            @php $periodPrograms = $programsByPeriod[$period->id] ?? collect(); @endphp
+                            @forelse($periodPrograms as $program)
+                                <div class="relative overflow-hidden rounded-2xl h-56 group bg-black">
+                                    <img src="{{ $program->image_url }}"
+                                        class="w-full h-full object-cover opacity-60 group-hover:scale-110 transition duration-500">
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <h4 class="text-white font-bold text-2xl uppercase tracking-widest text-center px-4">{{ $program->name }}</h4>
+                                    </div>
+                                </div>
+                            @empty
+                                <p class="text-gray-400 col-span-2 text-center py-8">Belum ada program kerja untuk periode ini.</p>
+                            @endforelse
+                        </div>
+                    </div>
+                @endforeach
+            @else
+                <p class="text-center text-gray-400">Data program kerja belum tersedia.</p>
+            @endif
         </div>
     </section>
 
-    <section class="relative bg-gradient-to-b from-gray-700 via-gray-100 to-gray-800 py-20 font-[Poppins]">
+    {{-- ================================ INFO PENDAFTARAN ================================ --}}
+    <section id="info-pendaftaran"
+        class="relative bg-gradient-to-b from-gray-700 via-gray-100 to-gray-800 py-20 font-[Poppins]">
 
         <div class="container mx-auto px-4 md:px-10">
 
@@ -251,124 +266,53 @@
                 <div class="w-full h-1 bg-blue-500 mt-4 shadow-[0_0_10px_rgba(59,130,246,0.8)]"></div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-20 gap-x-8">
+            @if($registrations->count() > 0)
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-20 gap-x-8">
+                    @foreach($registrations as $reg)
+                        <div class="relative group">
+                            <div class="bg-white rounded-[30px] h-64 p-5 flex flex-col justify-between border border-gray-200 shadow-lg transition-transform hover:-translate-y-1 duration-300 z-0">
+                                @if($reg->banner_url)
+                                    <div class="flex-grow bg-gray-100 rounded-t-2xl overflow-hidden">
+                                        <img src="{{ $reg->banner_url }}" class="w-full h-full object-cover rounded-t-2xl" alt="">
+                                    </div>
+                                @else
+                                    <div class="flex-grow bg-white rounded-t-2xl flex items-center justify-center">
+                                        <p class="text-gray-300 text-4xl font-bold">{{ Str::upper(Str::limit($reg->title, 10)) }}</p>
+                                    </div>
+                                @endif
 
-                <div class="relative group">
-                    <div
-                        class="bg-white rounded-[30px] h-64 p-5 flex flex-col justify-between border border-gray-200 shadow-lg transition-transform hover:-translate-y-1 duration-300 z-0">
-                        <div class="flex-grow bg-white rounded-t-2xl"></div>
-
-                        <div class="flex justify-between items-center mt-4 border-t pt-2 border-gray-100">
-                            <span class="text-xs md:text-sm font-semibold text-gray-800">
-                                01 - 28 February 2026
-                            </span>
-                            <button
-                                class="flex items-center gap-2 border-2 border-yellow-400 rounded-lg px-4 py-1 text-sm font-bold text-gray-800 hover:bg-yellow-400 transition-colors duration-300">
-                                Join <i class="fa-solid fa-arrow-right"></i>
-                            </button>
+                                <div class="flex justify-between items-center mt-4 border-t pt-2 border-gray-100">
+                                    <span class="text-xs md:text-sm font-semibold text-gray-800">
+                                        @if($reg->open_date && $reg->close_date)
+                                            {{ $reg->open_date->format('d M') }} - {{ $reg->close_date->format('d M Y') }}
+                                        @else
+                                            Selalu Terbuka
+                                        @endif
+                                    </span>
+                                    @if($reg->isOpen())
+                                        <a href="{{ route('registrations.show', $reg->slug) }}"
+                                            class="flex items-center gap-2 border-2 border-yellow-400 rounded-lg px-4 py-1 text-sm font-bold text-gray-800 hover:bg-yellow-400 transition-colors duration-300">
+                                            Join <i class="fa-solid fa-arrow-right"></i>
+                                        </a>
+                                    @else
+                                        <span class="text-xs text-red-500 font-semibold">Ditutup</span>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="absolute -bottom-5 left-1/2 transform -translate-x-1/2 bg-white border-2 border-yellow-400 rounded-full px-8 py-1 shadow-md z-10 whitespace-nowrap">
+                                <span class="text-gray-800 font-bold text-sm uppercase tracking-wide">{{ $reg->title }}</span>
+                            </div>
                         </div>
-                    </div>
-                    <div
-                        class="absolute -bottom-5 left-1/2 transform -translate-x-1/2 bg-white border-2 border-yellow-400 rounded-full px-8 py-1 shadow-md z-10 whitespace-nowrap">
-                        <span class="text-gray-800 font-bold text-sm uppercase tracking-wide">IT - VERSARY</span>
-                    </div>
+                    @endforeach
                 </div>
-
-                <div class="relative group">
-                    <div
-                        class="bg-white rounded-[30px] h-64 p-5 flex flex-col justify-between border border-gray-200 shadow-lg transition-transform hover:-translate-y-1 duration-300">
-                        <div class="flex-grow bg-white rounded-t-2xl"></div>
-                        <div class="flex justify-between items-center mt-4 border-t pt-2 border-gray-100">
-                            <span class="text-xs md:text-sm font-semibold text-gray-800">01 - 28 February 2026</span>
-                            <button
-                                class="flex items-center gap-2 border-2 border-yellow-400 rounded-lg px-4 py-1 text-sm font-bold text-gray-800 hover:bg-yellow-400 transition-colors duration-300">
-                                Join <i class="fa-solid fa-arrow-right"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div
-                        class="absolute -bottom-5 left-1/2 transform -translate-x-1/2 bg-white border-2 border-yellow-400 rounded-full px-8 py-1 shadow-md z-10 whitespace-nowrap">
-                        <span class="text-gray-800 font-bold text-sm uppercase tracking-wide">WORKSHOP</span>
-                    </div>
-                </div>
-
-                <div class="relative group">
-                    <div
-                        class="bg-white rounded-[30px] h-64 p-5 flex flex-col justify-between border border-gray-200 shadow-lg transition-transform hover:-translate-y-1 duration-300">
-                        <div class="flex-grow bg-white rounded-t-2xl"></div>
-                        <div class="flex justify-between items-center mt-4 border-t pt-2 border-gray-100">
-                            <span class="text-xs md:text-sm font-semibold text-gray-800">01 - 28 February 2026</span>
-                            <button
-                                class="flex items-center gap-2 border-2 border-yellow-400 rounded-lg px-4 py-1 text-sm font-bold text-gray-800 hover:bg-yellow-400 transition-colors duration-300">
-                                Join <i class="fa-solid fa-arrow-right"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div
-                        class="absolute -bottom-5 left-1/2 transform -translate-x-1/2 bg-white border-2 border-yellow-400 rounded-full px-8 py-1 shadow-md z-10 whitespace-nowrap">
-                        <span class="text-gray-800 font-bold text-sm uppercase tracking-wide">KERJA SOSIAL</span>
-                    </div>
-                </div>
-
-                <div class="relative group">
-                    <div
-                        class="bg-white rounded-[30px] h-64 p-5 flex flex-col justify-between border border-gray-200 shadow-lg transition-transform hover:-translate-y-1 duration-300">
-                        <div class="flex-grow bg-white rounded-t-2xl"></div>
-                        <div class="flex justify-between items-center mt-4 border-t pt-2 border-gray-100">
-                            <span class="text-xs md:text-sm font-semibold text-gray-800">01 - 28 February 2026</span>
-                            <button
-                                class="flex items-center gap-2 border-2 border-yellow-400 rounded-lg px-4 py-1 text-sm font-bold text-gray-800 hover:bg-yellow-400 transition-colors duration-300">
-                                Join <i class="fa-solid fa-arrow-right"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div
-                        class="absolute -bottom-5 left-1/2 transform -translate-x-1/2 bg-white border-2 border-yellow-400 rounded-full px-8 py-1 shadow-md z-10 whitespace-nowrap">
-                        <span class="text-gray-800 font-bold text-sm uppercase tracking-wide">WEBINAR</span>
-                    </div>
-                </div>
-
-                <div class="relative group">
-                    <div
-                        class="bg-white rounded-[30px] h-64 p-5 flex flex-col justify-between border border-gray-200 shadow-lg transition-transform hover:-translate-y-1 duration-300">
-                        <div class="flex-grow bg-white rounded-t-2xl"></div>
-                        <div class="flex justify-between items-center mt-4 border-t pt-2 border-gray-100">
-                            <span class="text-xs md:text-sm font-semibold text-gray-800">01 - 28 February 2026</span>
-                            <button
-                                class="flex items-center gap-2 border-2 border-yellow-400 rounded-lg px-4 py-1 text-sm font-bold text-gray-800 hover:bg-yellow-400 transition-colors duration-300">
-                                Join <i class="fa-solid fa-arrow-right"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div
-                        class="absolute -bottom-5 left-1/2 transform -translate-x-1/2 bg-white border-2 border-yellow-400 rounded-full px-8 py-1 shadow-md z-10 whitespace-nowrap">
-                        <span class="text-gray-800 font-bold text-sm uppercase tracking-wide">SERTIJAB</span>
-                    </div>
-                </div>
-
-                <div class="relative group">
-                    <div
-                        class="bg-white rounded-[30px] h-64 p-5 flex flex-col justify-between border border-gray-200 shadow-lg transition-transform hover:-translate-y-1 duration-300">
-                        <div class="flex-grow bg-white rounded-t-2xl"></div>
-                        <div class="flex justify-between items-center mt-4 border-t pt-2 border-gray-100">
-                            <span class="text-xs md:text-sm font-semibold text-gray-800">01 - 28 February 2026</span>
-                            <button
-                                class="flex items-center gap-2 border-2 border-yellow-400 rounded-lg px-4 py-1 text-sm font-bold text-gray-800 hover:bg-yellow-400 transition-colors duration-300">
-                                Join <i class="fa-solid fa-arrow-right"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div
-                        class="absolute -bottom-5 left-1/2 transform -translate-x-1/2 bg-white border-2 border-yellow-400 rounded-full px-8 py-1 shadow-md z-10 whitespace-nowrap">
-                        <span class="text-gray-800 font-bold text-sm uppercase tracking-wide">SEMINAR TI</span>
-                    </div>
-                </div>
-
-            </div>
+            @else
+                <p class="text-center text-gray-300 text-lg">Belum ada informasi pendaftaran saat ini.</p>
+            @endif
         </div>
     </section>
 
-    <section class="bg-[#F9F9F9] py-20 font-[Poppins]">
+    {{-- ================================ GALLERY ================================ --}}
+    <section id="gallery" class="bg-[#F9F9F9] py-20 font-[Poppins]">
         <div class="container mx-auto px-4">
 
             <div class="relative text-center mb-16 h-24 flex items-center justify-center">
@@ -382,106 +326,54 @@
                 </h2>
             </div>
 
-            <div
-                class="bg-gray-200 border-[8px] border-yellow-400 rounded-[50px] p-6 md:p-12 shadow-xl max-w-7xl mx-auto">
+            <div class="bg-gray-200 border-[8px] border-yellow-400 rounded-[50px] p-6 md:p-12 shadow-xl max-w-7xl mx-auto">
 
+                {{-- Category filter buttons --}}
                 <div class="flex flex-wrap justify-center gap-3 md:gap-5 mb-10">
-                    <button
-                        class="bg-white border-2 border-yellow-400 px-6 py-2 rounded-xl font-bold text-xs md:text-sm text-gray-800 hover:bg-yellow-400 hover:text-white transition-all duration-300 shadow-sm uppercase">
-                        IT - VERSARY
+                    <button onclick="filterGallery('all')"
+                        class="gallery-filter bg-yellow-400 text-white border-2 border-yellow-400 px-6 py-2 rounded-xl font-bold text-xs md:text-sm transition-all duration-300 shadow-sm uppercase"
+                        data-cat="all">
+                        SEMUA
                     </button>
-                    <button
-                        class="bg-white border-2 border-yellow-400 px-6 py-2 rounded-xl font-bold text-xs md:text-sm text-gray-800 hover:bg-yellow-400 hover:text-white transition-all duration-300 shadow-sm uppercase">
-                        SEMINAR
-                    </button>
-                    <button
-                        class="bg-white border-2 border-yellow-400 px-6 py-2 rounded-xl font-bold text-xs md:text-sm text-gray-800 hover:bg-yellow-400 hover:text-white transition-all duration-300 shadow-sm uppercase">
-                        KERJA SOSIAL
-                    </button>
-                    <button
-                        class="bg-white border-2 border-yellow-400 px-6 py-2 rounded-xl font-bold text-xs md:text-sm text-gray-800 hover:bg-yellow-400 hover:text-white transition-all duration-300 shadow-sm uppercase">
-                        IT - BOOTCAMP
-                    </button>
-                    <button
-                        class="bg-white border-2 border-yellow-400 px-6 py-2 rounded-xl font-bold text-xs md:text-sm text-gray-800 hover:bg-yellow-400 hover:text-white transition-all duration-300 shadow-sm uppercase">
-                        MONTHLY GATHERING
-                    </button>
-                    <button
-                        class="bg-white border-2 border-yellow-400 px-6 py-2 rounded-xl font-bold text-xs md:text-sm text-gray-800 hover:bg-yellow-400 hover:text-white transition-all duration-300 shadow-sm uppercase">
-                        LAINNYA
-                    </button>
+                    @foreach($categories as $cat)
+                        <button onclick="filterGallery('{{ $cat }}')"
+                            class="gallery-filter bg-white border-2 border-yellow-400 px-6 py-2 rounded-xl font-bold text-xs md:text-sm text-gray-800 hover:bg-yellow-400 hover:text-white transition-all duration-300 shadow-sm uppercase"
+                            data-cat="{{ $cat }}">
+                            {{ $cat }}
+                        </button>
+                    @endforeach
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-
-                    <div
-                        class="group h-56 md:h-64 rounded-2xl overflow-hidden shadow-lg border border-gray-300 relative">
-                        <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                            alt="IT Versary"
-                            class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
-                        <div
-                            class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300">
-                        </div>
+                {{-- Gallery grid --}}
+                @if($galleries->count() > 0)
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="gallery-grid">
+                        @foreach($galleries as $g)
+                            <div class="gallery-item group h-56 md:h-64 rounded-2xl overflow-hidden shadow-lg border border-gray-300 relative"
+                                 data-category="{{ $g->category }}">
+                                <img src="{{ $g->image_url }}"
+                                    alt="{{ $g->title ?? $g->category }}"
+                                    class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                                <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-end">
+                                    @if($g->caption || $g->title)
+                                        <div class="p-3 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                            @if($g->title)<p class="font-bold text-sm">{{ $g->title }}</p>@endif
+                                            @if($g->caption)<p class="text-xs">{{ $g->caption }}</p>@endif
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
-
-                    <div
-                        class="group h-56 md:h-64 rounded-2xl overflow-hidden shadow-lg border border-gray-300 relative">
-                        <img src="https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                            alt="Camping"
-                            class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
-                        <div
-                            class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300">
-                        </div>
-                    </div>
-
-                    <div
-                        class="group h-56 md:h-64 rounded-2xl overflow-hidden shadow-lg border border-gray-300 relative">
-                        <img src="https://images.unsplash.com/photo-1544531586-fde5298cdd40?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                            alt="Seminar Group"
-                            class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
-                        <div
-                            class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300">
-                        </div>
-                    </div>
-
-                    <div
-                        class="group h-56 md:h-64 rounded-2xl overflow-hidden shadow-lg border border-gray-300 relative">
-                        <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                            alt="Indoor Event"
-                            class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
-                        <div
-                            class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300">
-                        </div>
-                    </div>
-
-                    <div
-                        class="group h-56 md:h-64 rounded-2xl overflow-hidden shadow-lg border border-gray-300 relative">
-                        <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                            alt="Gathering"
-                            class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
-                        <div
-                            class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300">
-                        </div>
-                    </div>
-
-                    <div
-                        class="group h-56 md:h-64 rounded-2xl overflow-hidden shadow-lg border border-gray-300 relative">
-                        <img src="https://images.unsplash.com/photo-1551818255-e6e10975bc17?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                            alt="Award"
-                            class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
-                        <div
-                            class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300">
-                        </div>
-                    </div>
-
-                </div>
+                @else
+                    <p class="text-center text-gray-400 py-8">Belum ada dokumentasi kegiatan.</p>
+                @endif
 
             </div>
         </div>
     </section>
 
 
-
+    {{-- ================================ FOOTER ================================ --}}
     <footer id="contact" class="bg-white pt-24 pb-12 border-t-8 border-yellow-500">
         <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-16 text-sm">
             <div class="space-y-6">
@@ -491,10 +383,10 @@
             <div>
                 <h4 class="font-bold text-yellow-600 mb-8 uppercase">CONTACT US</h4>
                 <ul class="space-y-4 text-gray-600">
-                    <li><i class="fas fa-map-marker-alt mr-3 text-yellow-500"></i> JL. Bedugul No.39 Denpasar
+                    <li><i class="fas fa-map-marker-alt mr-3 text-yellow-500"></i>JL. Bedugul No.39 Denpasar
                     </li>
-                    <li><i class="fas fa-envelope mr-3 text-yellow-500"></i> himatiundiknas@gmail.com</li>
-                    <li><i class="fab fa-instagram mr-3 text-yellow-500"></i> @himati_undiknas</li>
+                    <li><i class="fas fa-envelope mr-3 text-yellow-500"></i>himatiundiknas@gmail.com</li>
+                    <li><i class="fab fa-instagram mr-3 text-yellow-500"></i>@himati_undiknas</li>
                 </ul>
             </div>
             <div>
@@ -522,34 +414,69 @@
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
+        // ====== Swiper Hero ======
         var swiper = new Swiper(".heroSwiper", {
             loop: true,
-            effect: "fade",
-            autoplay: { delay: 4000, disableOnInteraction: false },
-            speed: 1500,
-        });
-        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script>
-            var swiper = new Swiper(".heroSwiper", {
-                loop: true,
             centeredSlides: true,
             autoplay: {
-                delay: 5000, // Geser otomatis tiap 5 detik
-            disableOnInteraction: false, // Tetap otomatis meski sudah dipencet manual
-                },
+                delay: 5000,
+                disableOnInteraction: false,
+            },
             pagination: {
                 el: ".swiper-pagination",
-            clickable: true, // Titik-titik bisa diklik
-                },
+                clickable: true,
+            },
             navigation: {
                 nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-                },
-            effect: "slide", // Gunakan 'slide' untuk efek carousel klasik atau 'fade' untuk transisi halus
+                prevEl: ".swiper-button-prev",
+            },
+            effect: "slide",
             speed: 1000,
+        });
+
+        // ====== Program Kerja Year Tabs ======
+        function showPeriod(periodId) {
+            // Hide all
+            document.querySelectorAll('.period-content').forEach(el => el.classList.add('hidden'));
+            // Show selected
+            document.querySelector(`.period-content[data-period="${periodId}"]`)?.classList.remove('hidden');
+
+            // Update tab styles
+            document.querySelectorAll('.period-tab').forEach(btn => {
+                btn.classList.remove('bg-gray-900', 'text-white', 'border-gray-900');
+                btn.classList.add('bg-white', 'text-gray-800', 'border-yellow-500');
             });
+            const activeTab = document.querySelector(`.period-tab[data-period="${periodId}"]`);
+            if (activeTab) {
+                activeTab.classList.add('bg-gray-900', 'text-white', 'border-gray-900');
+                activeTab.classList.remove('bg-white', 'text-gray-800', 'border-yellow-500');
+            }
+        }
+
+        // ====== Gallery Filter ======
+        function filterGallery(category) {
+            const items = document.querySelectorAll('.gallery-item');
+            items.forEach(item => {
+                if (category === 'all' || item.dataset.category === category) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            // Update button styles
+            document.querySelectorAll('.gallery-filter').forEach(btn => {
+                btn.classList.remove('bg-yellow-400', 'text-white');
+                btn.classList.add('bg-white', 'text-gray-800');
+            });
+            const activeBtn = document.querySelector(`.gallery-filter[data-cat="${category}"]`);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-yellow-400', 'text-white');
+                activeBtn.classList.remove('bg-white', 'text-gray-800');
+            }
+        }
     </script>
-    </script>
+
 </body>
 
 </html>

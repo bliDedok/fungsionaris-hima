@@ -4,63 +4,83 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Program;
+use App\Models\Period;
+use App\Models\Division;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProgramController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $programs = Program::with('period', 'division')->orderByDesc('id')->get();
+        return view('admin.programs.index', compact('programs'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $periods = Period::orderByDesc('id')->get();
+        $divisions = Division::orderBy('name')->get();
+        return view('admin.programs.form', compact('periods', 'divisions'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'period_id' => 'required|exists:periods,id',
+            'division_id' => 'nullable|exists:divisions,id',
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|max:2048',
+            'start_at' => 'nullable|date',
+            'end_at' => 'nullable|date|after_or_equal:start_at',
+        ]);
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('programs', 'public');
+        }
+
+        Program::create($data);
+
+        return redirect()->route('admin.programs.index')->with('success', 'Program kerja berhasil ditambahkan.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Program $program)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Program $program)
     {
-        //
+        $periods = Period::orderByDesc('id')->get();
+        $divisions = Division::orderBy('name')->get();
+        return view('admin.programs.form', compact('program', 'periods', 'divisions'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Program $program)
     {
-        //
+        $data = $request->validate([
+            'period_id' => 'required|exists:periods,id',
+            'division_id' => 'nullable|exists:divisions,id',
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|max:2048',
+            'start_at' => 'nullable|date',
+            'end_at' => 'nullable|date|after_or_equal:start_at',
+        ]);
+
+        if ($request->hasFile('image')) {
+            if ($program->image)
+                Storage::disk('public')->delete($program->image);
+            $data['image'] = $request->file('image')->store('programs', 'public');
+        }
+
+        $program->update($data);
+
+        return redirect()->route('admin.programs.index')->with('success', 'Program kerja berhasil diperbarui.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Program $program)
     {
-        //
+        if ($program->image)
+            Storage::disk('public')->delete($program->image);
+        $program->delete();
+
+        return redirect()->route('admin.programs.index')->with('success', 'Program kerja berhasil dihapus.');
     }
 }
